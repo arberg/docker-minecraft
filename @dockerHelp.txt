@@ -1,0 +1,18 @@
+    -e JVM_OPTS='-Dfml.queryResult=confirm' \
+    -e VERSION=1.10.2 \
+    -e TYPE=FORGE -e FORGEVERSION=12.18.3.2511 \
+    -e OPS=QuirkySpirit,Notebook,Muaddib \
+    -e MODE=creative \
+    -e FORCE_GAMEMODE=true \
+    -e ONLINE_MODE=FALSE \
+    -e ALLOW_NETHER=true \
+    -e ENABLE_COMMAND_BLOCK=true \
+
+INIT_MEMORY probably xms
+    -e INIT_MEMORY="1G" 
+
+MAXT_MEMORY probably xmx
+    -e MAX_MEMORY="2G" \ 
+
+MEMORY sets init and max
+    -e MEMORY="2G" \ 
