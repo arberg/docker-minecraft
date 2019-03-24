@@ -11,7 +11,7 @@ https://www.youtube.com/results?search_query=pondus+plus+plus
 Nedenstående er skrevet til en ven, men måske kan andre få nytte af det...
 
 
-Kør f.eks. for en meget tung fuld modded minecraft server baseret på minecraft 1.12
+Kør f.eks. for en meget tung fuld modded minecraft server baseret på minecraft 1.12 (modpack fil mangler nok, se alle nederst)
 
 ```
 ftbRevelation.sh create
@@ -111,6 +111,11 @@ https://www.youtube.com/results?search_query=pondus+plus+plus
 
     - - Setting read-only cause Twitch to complain about setting profile. Logging in probably updates         file.
       - After opening minecraft launcher from Twitch, check profile name in top right corner
+
+- How to run FTB mod pack
+
+  - Download FTB modpack via Twitch client
+  - I'm not quite sure how to match it to server, but downloading the corresponding server modpack from https://www.feed-the-beast.com/projects/ should do. Update ftbRevelation.sh and/orminecraftCustomFtb.sh and point to downloaded modpack file.
 
 Kitematic Docker Minecraft
 
