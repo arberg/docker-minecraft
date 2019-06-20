@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source minecraftCustom.sh
+source minecraftFunctions.sh
 
 # Custom Server.properties - I don't know which server.properties is used dataFtbRevelation-v1.12\FeedTheBeast or its parent
 # max-tick-time=-1 # Disable [minecraft/ServerHangWatchdog] so it does not kill server on resume due to lag

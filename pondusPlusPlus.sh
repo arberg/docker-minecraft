@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source minecraftCustom.sh
+source minecraftFunctions.sh
 
 DOCKER_NAME=minecraftPlusPlus
 HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/dataMinecraft1.13_PondusPlusPlus
@@ -8,7 +8,7 @@ SERVER_MESSAGE="Minecraft 1.13"
 PORT=25565
 MINECRAFT_VERSION=1.13
 #FORGE_VERSION=12.18.3.2185
-# Login minecraft 
+# Login minecraft
 ONLINE_MODE=false
 SEED=505544229161414
 

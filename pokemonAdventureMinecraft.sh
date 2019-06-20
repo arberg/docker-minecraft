@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source minecraftCustom.sh
+source minecraftFunctions.sh
 
 DOCKER_NAME=minecraftPokemon
 HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/dataPokemonAdventureReloaded

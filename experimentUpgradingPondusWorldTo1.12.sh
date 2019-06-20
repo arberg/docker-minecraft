@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-source minecraftCustom.sh
+source minecraftFunctions.sh
 
 DOCKER_NAME=minecraft1.12
 HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/dataPondusWorld1.12
 SERVER_MESSAGE="Pondus World v1.12"
 PORT=25566
 MINECRAFT_VERSION=1.12.2
-FORGE_VERSION=14.23.4.2759  
+FORGE_VERSION=14.23.4.2759
 # MINECRAFT_VERSION=1.10.2
 # FORGE_VERSION=12.18.3.2511
-# Login minecraft 
+# Login minecraft
 ONLINE_MODE=false
 SEED=2305120
 
