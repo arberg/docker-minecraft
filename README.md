@@ -115,7 +115,7 @@ https://www.youtube.com/results?search_query=pondus+plus+plus
 - How to run FTB mod pack
 
   - Download FTB modpack via Twitch client
-  - I'm not quite sure how to match it to server, but downloading the corresponding server modpack from https://www.feed-the-beast.com/projects/ should do. Update ftbRevelation.sh and/orminecraftCustomFtb.sh and point to downloaded modpack file.
+  - I'm not quite sure how to match it to server, but downloading the corresponding server modpack from https://www.feed-the-beast.com/projects/ should do. Update ftbRevelation.sh and point to downloaded modpack file.
 
 Kitematic Docker Minecraft
 

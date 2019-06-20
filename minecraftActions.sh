@@ -3,13 +3,20 @@ if [[ "$1" == "logs" ]] ; then
 elif [[ "$1" == "stop" ]] ; then
 	stopPrevious
 	stop
-elif [[ "$1" == "create" ]] ; then
-	# stopPrevious
+elif [[ "$1" == "restart" ]] ; then
 	stop
-	sleep 2
-	rmDocker
-	createAndStartDocker
-	followLogs
+	start
+elif [[ "$1" == "create" ]] ; then
+        # stopPrevious
+        stop
+        sleep 2
+        rmDocker
+        createAndStartDocker
+        followLogs
+elif [[ "$1" == "createOnly" ]] ; then
+        rmDocker
+        createAndStartDocker
+        followLogs
 elif [[ "$1" == "startOnly" ]] ; then
 	start
 elif [[ "$1" == "start" ]] ; then

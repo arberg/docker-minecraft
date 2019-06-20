@@ -9,18 +9,30 @@ FORGE_VERSION=12.18.3.2185
 OPS=QuirkySpirit,Notebook,Muaddib,QuirkySpirit1,Notebook1,Muaddib1,Pil,Pil1,Lis,Lis1,Alex,LunaKittyCatty,Emma
 # Login minecraft
 ONLINE_MODE=false
-SEED=2305120
+IS_FTB=false
+FTBServerZip=FTBServer.zip
+# Hmm jeg får pondus seed hele tiden, just set in server.properties.
+#SEED=2305120
     # worked well with 4-7 GB ram
     # Mayas OldPil hakker i PondusModded, dog ikke særligt ofte.
 INIT_MEMORY="2G"
 MAX_MEMORY="7G"
+ALLOW_FLIGHT=false
 
 STATE_RUNNING_INSTANCE_FILE=stateRunningInstance.dat
+
+sleepAndStatus() {
+    echo "Sleeping 5 sec ..."
+    sleep 5
+    docker ps -a | grep minecraft
+}
+
 
 start() {
     docker start $DOCKER_NAME
     docker unpause $DOCKER_NAME
     echo "$DOCKER_NAME" > $STATE_RUNNING_INSTANCE_FILE
+    sleepAndStatus
 }
 
 stopInstance() {
@@ -73,26 +85,50 @@ createAndStartDocker() {
     rm $HOSTDATA/ops.txt.converted
     docker pull itzg/minecraft-server
     echo "/data -> $HOSTDATA"
-    docker run -d -v $HOSTDATA:/data \
-        -e VERSION=$MINECRAFT_VERSION \
-        -e TYPE=FORGE -e FORGEVERSION=$FORGE_VERSION \
-        -e "MOTD=$SERVER_MESSAGE" \
-        -e "OPS=$OPS" \
-        -e SEED=$SEED \
-        -e MODE=creative \
-        -e FORCE_GAMEMODE=true \
-        -e ONLINE_MODE=$ONLINE_MODE \
-        -e ALLOW_NETHER=true \
-        -e ENABLE_COMMAND_BLOCK=true \
-        -e INIT_MEMORY="$INIT_MEMORY" \
-        -e MAX_MEMORY="$MAX_MEMORY" \
-        -e GUI=false \
-        -v "/etc/timezone:/etc/timezone:ro" \
-        -v "/etc/localtime:/etc/localtime:ro" \
-        -p $PORT:25565 -e EULA=TRUE --name $DOCKER_NAME itzg/minecraft-server
+    if [[ "$IS_FTB" == "true" ]] ; then
+        echo "FTBServerZip=$FTBServerZip"
+        docker run -d -v $HOSTDATA:/data \
+            -e VERSION=$MINECRAFT_VERSION \
+            -e TYPE=FTB -e FTB_SERVER_MOD=$FTBServerZip \
+            -e "MOTD=$SERVER_MESSAGE" \
+            -e "OPS=$OPS" \
+            -e SEED=$SEED \
+            -e MODE=creative \
+            -e FORCE_GAMEMODE=true \
+            -e ONLINE_MODE=$ONLINE_MODE \
+            -e ALLOW_NETHER=true \
+            -e ENABLE_COMMAND_BLOCK=true \
+            -e INIT_MEMORY="$INIT_MEMORY" \
+            -e MAX_MEMORY="$MAX_MEMORY" \
+            -e GUI=false \
+            -v "/etc/timezone:/etc/timezone:ro" \
+            -v "/etc/localtime:/etc/localtime:ro" \
+            -p $PORT:25565 -e EULA=TRUE --name $DOCKER_NAME itzg/minecraft-server
+    else
+        echo "NOT FTB"
+        docker run -d -v $HOSTDATA:/data \
+            -e VERSION=$MINECRAFT_VERSION \
+            -e TYPE=FORGE -e FORGEVERSION=$FORGE_VERSION \
+            -e "MOTD=$SERVER_MESSAGE" \
+            -e "OPS=$OPS" \
+            -e SEED=$SEED \
+            -e MODE=creative \
+            -e FORCE_GAMEMODE=true \
+            -e ONLINE_MODE=$ONLINE_MODE \
+            -e ALLOW_NETHER=true \
+            -e ENABLE_COMMAND_BLOCK=true \
+            -e INIT_MEMORY="$INIT_MEMORY" \
+            -e MAX_MEMORY="$MAX_MEMORY" \
+            -e GUI=false \
+            -v "/etc/timezone:/etc/timezone:ro" \
+            -v "/etc/localtime:/etc/localtime:ro" \
+            -p $PORT:25565 -e EULA=TRUE --name $DOCKER_NAME itzg/minecraft-server
+    fi
+
     if (( $? == 0 )) ; then
         echo "$DOCKER_NAME" > $STATE_RUNNING_INSTANCE_FILE
     fi
+
     #    -e CONSOLE=false \
     #    -e JVM_OPTS="-Dfml.queryResult=confirm" \
     #    --noconsole

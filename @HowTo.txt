@@ -1,0 +1,2 @@
+Minecraft commands
+New player from visitor => operator: /op <name>
