@@ -6,6 +6,11 @@ PC Java Minecraft docker images
 
 https://www.youtube.com/results?search_query=pondus+plus+plus
 
+## Andre pondus modpacks
+
+https://www.curseforge.com/minecraft/modpacks/pondus/files/2548541
+
+
 ## Hjælp en ven i nøden :)
 
 Nedenstående er skrevet til en ven, men måske kan andre få nytte af det...
