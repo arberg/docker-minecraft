@@ -1,0 +1,1 @@
+2020.12 MinecraftFunctions.sh: ALLOW_FLIGHT=true # Changed 2020.12, maybe crashes on some

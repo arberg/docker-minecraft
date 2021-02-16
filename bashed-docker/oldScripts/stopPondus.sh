@@ -1,0 +1,1 @@
+sudo docker exec minecraftPondus rcon-cli stop

@@ -1,0 +1,21 @@
+fra minecraftFunctions Forge
+
+   RCON_PORT=$((PORT+100))
+ 
+
+            -e SEED=$SEED \
+            -e MODE=creative \
+            -e FORCE_GAMEMODE=true \
+            -e ONLINE_MODE=$ONLINE_MODE \
+            -e ALLOW_NETHER=true \
+            -e ENABLE_COMMAND_BLOCK=true \
+            -e INIT_MEMORY="$INIT_MEMORY" \
+            -e MAX_MEMORY="$MAX_MEMORY" \
+            -e GUI=false \
+            -e ENABLE_AUTOPAUSE="$AUTO_PAUSE"\
+            -v "/etc/timezone:/etc/timezone:ro" \
+            -v "/etc/localtime:/etc/localtime:ro" \
+            -p $PORT:25565 \
+            -p $RCON_PORT:25575 \
+            -e JVM_DD_OPTS=docker=${DOCKER_NAME} \
+			-e UID=$RUN_AS_UID -e GID=$RUN_AS_GID \

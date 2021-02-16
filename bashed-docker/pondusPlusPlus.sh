@@ -3,10 +3,11 @@
 source minecraftFunctions.sh
 
 DOCKER_NAME=minecraftPlusPlus
-HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/dataMinecraft1.13_PondusPlusPlus
+DATA_DIR=dataMinecraft1.13_PondusPlusPlus
 SERVER_MESSAGE="Minecraft 1.13"
 PORT=25565
 MINECRAFT_VERSION=1.13
+TYPE=FORGE
 #FORGE_VERSION=12.18.3.2185
 # Login minecraft
 ONLINE_MODE=false

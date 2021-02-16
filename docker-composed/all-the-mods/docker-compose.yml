@@ -1,0 +1,31 @@
+version: '3.2'
+# Port: 25565 Game client connect
+# Port: 25575 RCON remote CLI port
+# UID 99 is nobody
+# Download server files at: https://www.curseforge.com/minecraft/modpacks/all-the-mods-6/files
+services:
+  mc:
+    container_name: minecraftAllTheMods
+    image: itzg/minecraft-server:java8
+    restart: always
+    volumes:
+    - ./modpacks:/modpacks:ro
+    - ./data:/data
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+      INIT_MEMORY: 2G
+      MAX_MEMORY: 8G
+      ENABLE_AUTOPAUSE: "true"
+      TYPE: CURSEFORGE
+      CF_SERVER_MOD: /modpacks/SIMPLE-SERVER-FILES-1.5.2.zip
+      OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2"
+      ONLINE_MODE: "true"
+      MODE: "creative"
+      GUI: "false"
+      EULA: "true"
+      UID: 99
+      GID: 100
+    ports:
+      - 25584:25565
+      - 25684:25575

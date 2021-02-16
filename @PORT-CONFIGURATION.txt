@@ -1,0 +1,25 @@
+# Ports Forwarded range in router: 25565-25599 (Router: Network > Firewal: Port forwards)
+#   25565 coolcraft
+#   25565 pondusPlusPlus - deprecated, port used by coolcraft
+#   25566 pondusModded
+#   25566 experiment
+#   25568 SkyAdventures
+#   25567 Pokemon
+#   25569 ftbRevelationDragons
+#   25570 ftbRevelation
+#   25571 mabklubben
+#   25572 coolcraftorg temp
+#   25573 coolcraftorg backuptest
+#   25574 RLCraft
+#   25575 GeminiTrayEpicMedievalKingdom
+#   25576 GeminiTrayEpicMedievalKingdomForgeModded
+#   25577 StrandedOnEarth
+#   25578 KindaCrazyCraft
+#   25579 SevTechAges
+#   25580 Space
+#   25581 Dungeons
+#   25582 RlCraft Marcus
+#   25583 Vanilla Marcus
+#   25584 AllTheMods
+#   25599 == Max forwarded by router ==
+

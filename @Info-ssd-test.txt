@@ -1,0 +1,6 @@
+FtbRevelationDragon startup time on HDD: start 3:30 min
+FtbRevelationDragon startup time on SSD: start 3:10 min
+
+
+Coolcraft: Seemed to spawn island a bit faster on SSD
+
