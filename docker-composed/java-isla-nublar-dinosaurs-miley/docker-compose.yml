@@ -6,7 +6,7 @@ version: '3.2'
 # Added backup: docker-composed\mods\1.12-backup\Backups-1.12.2-1.5.7.jar
 services:
   mc:
-    container_name: minecraftMileyDinosaurs
+    container_name: $DOCKER_NAME
     image: itzg/minecraft-server:java8
     restart: always
     volumes:

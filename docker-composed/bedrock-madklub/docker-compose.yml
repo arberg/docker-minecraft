@@ -5,7 +5,7 @@ version: '3.2'
 # Download server files at: https://www.curseforge.com/minecraft/modpacks/all-the-mods-6/files
 services:
   mc:
-    container_name: minecraftPeMadklub
+    container_name: $DOCKER_NAME
     image: itzg/minecraft-bedrock-server:latest
     restart: always
     volumes:
