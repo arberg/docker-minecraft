@@ -1,0 +1,2 @@
+The bedrock whitelist is automatically updated with xuid's when user connect for the first time. Only users in this whitelist json or environment has access. We cannot add them via a /whitelist operator command
+      WHITE_LIST_USERS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2,CrackyAppy,ShoppyDoppy"

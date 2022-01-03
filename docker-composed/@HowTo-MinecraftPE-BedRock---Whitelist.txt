@@ -1,0 +1,16 @@
+See Madklub
+
+Names are case-sensitive, and can be found on login-screen, its the user-name
+
+or let user login with to get name and xuid: WHITE_LIST: "false"
+
+
+
+# Kingcarrot1234: Oscar
+# gamlegumleged: Ask
+# stoftomat: Sif
+
+# CrackyAppy, xuid: 2535430614959072
+# gamlegumleged, xuid: 2535446584047661
+# stoftomat, xuid: 2535441563445514
+# Kingcarrot1234, xuid: 2535428020221619

@@ -1,0 +1,41 @@
+version: '3.2'
+# Port: 25565 Game client connect
+# Port: 25575 RCON remote CLI port
+# UID 99 is nobody
+# Download server files at: https://www.curseforge.com/minecraft/modpacks/forge-labs-isla-nublar/files
+# Added backup: docker-composed\mods\1.12-backup\Backups-1.12.2-1.5.7.jar
+services:
+  mc:
+    container_name: minecraftMileyDinosaurs
+    image: itzg/minecraft-server:java8
+    restart: always
+    volumes:
+    - ./modpacks:/modpacks:ro
+    - ./data:/data
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+      INIT_MEMORY: 1G
+      MAX_MEMORY: 4G
+      ENABLE_AUTOPAUSE: "true"
+      MOTD: "Mileys Dinosaurs"
+      TYPE: "FORGE"
+      FORGEVERSION: "14.23.5.2854"
+      VERSION: "1.12.2"
+      # This modpack does not have server-files
+      # TYPE: CURSEFORGE
+      # CF_SERVER_MOD: /modpacks/Isla+Nublar+-Version+1.0.0A.zip
+      ALLOW_NETHER: "true"
+      ENABLE_COMMAND_BLOCK: "true"
+      OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2,MBBeyBlade"
+      ONLINE_MODE: "true"
+      ALLOW_FLIGHT: "true"
+      MODE: "creative"
+      GUI: "false"
+      EULA: "true"
+      UID: 99
+      GID: 100
+    ports:
+      - "$PORT:25565"
+      - "$PORT_RCON:25575"
+      

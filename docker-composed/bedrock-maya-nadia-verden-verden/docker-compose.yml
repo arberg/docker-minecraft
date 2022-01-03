@@ -1,0 +1,27 @@
+version: '3.2'
+# Port: 25565 Game client connect
+# Port: 25575 RCON remote CLI port
+# UID 99 is nobody
+# Download server files at: https://www.curseforge.com/minecraft/modpacks/all-the-mods-6/files
+services:
+  mc:
+    container_name: minecraftPeMayaNadiaVerdenVerden
+    image: itzg/minecraft-bedrock-server:latest
+    restart: always
+    volumes:
+    - ./data:/data
+    # - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+      # See https://hub.docker.com/r/itzg/minecraft-bedrock-server
+      # OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2"
+      ONLINE_MODE: "true"
+      GAMEMODE: "creative"
+      DIFFICULTY: "normal"
+      WHITE_LIST_USERS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2,CrackyAppy,ShoppyDoppy,MBBeyblade"
+      GUI: "false"
+      EULA: "true"
+      UID: 99
+      GID: 100
+    ports:
+      - 19133:19132/udp

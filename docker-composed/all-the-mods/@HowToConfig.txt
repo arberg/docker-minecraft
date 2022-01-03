@@ -1,0 +1,4 @@
+Nadia vil have campfires. kunne også bruge chimneys. 
+- Client change (check minecraftinstance.json to verify its the correct version I'm editing if I have multiple copies):
+-- config/adchimneys-client.toml
+--- disableVanillaCampfireSmoke = false

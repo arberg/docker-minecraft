@@ -1,0 +1,47 @@
+version: '3.2'
+# Port: 25565 Game client connect
+# Port: 25575 RCON remote CLI port
+# UID 99 is nobody
+# Download server files at: https://www.curseforge.com/minecraft/modpacks/all-the-mods-6/files
+services:
+  # ITZG Minecraft Docs: https://github.com/itzg/docker-minecraft-server/blob/master/README.md
+  mc:
+    container_name: $DOCKER_NAME
+    # https://github.com/itzg/docker-minecraft-server/blob/master/README.md#running-minecraft-server-on-different-java-version
+    # Forge versions <= 1.17 requires java8, for newer modpacks, use :latest (Java 17)
+    image: itzg/minecraft-server:java8
+    restart: always
+    volumes:
+    - ./modpacks:/modpacks:ro
+    - ./data:/data
+    - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+      INIT_MEMORY: 2G
+      MAX_MEMORY: 8G
+      JVM_DD_OPTS: "docker=$DOCKER_NAME"
+
+
+      # FTB options
+      VERSION: "1.12.2"
+      TYPE: FTB
+      FORGEVERSION: "14.23.5.2772"
+      FTB_SERVER_MOD: "FTBRevelationServer_3.0.1.zip"
+
+      ALLOW_FLIGHT: "true"
+      ALLOW_NETHER: "true"
+      ENABLE_COMMAND_BLOCK: "true"
+      EULA: "true"
+      FORCE_GAMEMODE: "false" # false - Players will join in the gamemode they left in.
+      GUI: "false"
+      MODE: "creative"
+      MOTD: "FTB Revelation 1.12 Dragons"
+      ONLINE_MODE: "true"
+      OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2"
+      SEED: "198901896753628"
+
+      UID: 99
+      GID: 100
+    ports:
+      - "$PORT:25565"
+      - "$PORT_RCON:25575"

@@ -1,0 +1,31 @@
+Bemærk: Spil via servere kræver XBox/Microsoft account signin. 
+Vi har Maya, Nadia, applantern, hqlantern, (marcus). Vi har også Alex+Lisa men de kodeord er ikke offentlige, det er Maya's og Nadias heller ikke.
+
+Det kræver selvf. lan agang, hvilket er på Wifi: Humlehaven120GuestLan
+
+
+
+Edit server.properties for Server-name:
+	server-name=BygHvadDuVil 
+	level-name=Nadia
+		Specify the world-folder under worlds
+	allow-cheats=true
+		Nødvendig for command gui inkl. /gamemode
+	white-list=true
+		if I open for remote access, use white-list
+
+
+Copy world from (find correct world via levelname.txt)
+	s:\MinecraftTabS6\com.mojang\minecraftWorlds\...
+Copy to 
+	"data\worlds\NAME" 
+	hvor NAME enten er defaulten "Bedrock level"
+	eller name sate i server.properties above
+
+
+
+####### Whitelist ########
+Either use environment WHITE_LIST_USERS or manually set whitelist.json +  (not both)
+When using environment WHITE_LIST_USERS the whitelist.json is updated automatically (with xuids on first connect) and server.properties gets white-list=true set on startup
+
+It's not possible to use /whitelist operator command

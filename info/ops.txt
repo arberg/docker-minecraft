@@ -1,0 +1,6 @@
+OPS=QuirkySpirit,Notebook,Muaddib,QuirkySpirit1,Notebook1,Muaddib1,Pil,Pil1,Lis,Lis1,Alex,LunaKittyCatty,Emma,Mr_Duckv2,Magicilly
+
+QuirkySpirit
+LunaKittyCatty
+Magicilly
+Mr_Duckv2

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo 'unpausing'
-DOCKERNAME=$(cat /mnt/user/dockerhub/itzg-minecraft-server/stateRunningInstance.dat)
+DOCKERNAME=$(cat /mnt/user/dockerhub/minecraft/stateRunningInstance.dat)
 docker unpause $DOCKERNAME
 echo 'Starting'
 docker start $DOCKERNAME

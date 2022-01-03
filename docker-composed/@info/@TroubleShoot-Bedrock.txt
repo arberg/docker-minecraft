@@ -1,0 +1,1 @@
+Hvis første login fra tablet virker og den derefter hænger i connection, dræb minecraft app på tablet, og start igen

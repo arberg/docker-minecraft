@@ -1,0 +1,3 @@
+See https://hub.docker.com/r/kaiede/minecraft-bedrock-backup
+it was linked from the official guide https://hub.docker.com/r/itzg/minecraft-bedrock-server
+Currently I just use duplicati. I stop the servers in the night with UnRaid UserScripts, and so I ensure that duplicati will get a backup of a non-running dabatase, so at least the nighly backup won't be ruined by backing up a live database.

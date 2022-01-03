@@ -19,27 +19,46 @@ services:
     environment:
       INIT_MEMORY: 2G
       MAX_MEMORY: 8G
-      JVM_DD_OPTS: "docker=${DOCKER_NAME}"
+      JVM_DD_OPTS: "docker=$DOCKER_NAME"
 
       # This AUTO_PAUSE pauses the process so it takes no CPU, but it still takes Memory, and it fails to startup on connecting.
       MAX_TICK_TIME: "-1" # To prevent watchdog to restart server after it unpauses due to long tick
+
       # Auto-stops java-process when no one connected and restarts on connection. May need to disable watch or disable tick-counter. See docs
       # pauses the process, does not stop the docker, and the docker looks like its running (as its up), but it does not answer login. So disable.
+      # See issue thread https://github.com/itzg/docker-minecraft-server/issues/555
+      # One user says resume it only works for dockers with the default port mapped for minecraft '25565', I tried that, it stil does not innitialize on FTB, probably different issue.
       ENABLE_AUTOPAUSE: "false"
-      AUTOPAUSE_TIMEOUT_EST: "60" # default 3600 (seconds) describes the time between the last client disconnect and the pausing of the process (read as timeout established)
+      # AUTOPAUSE_TIMEOUT_EST: "60" # default 3600 (seconds) describes the time between the last client disconnect and the pausing of the process (read as timeout established)
       # AUTOPAUSE_TIMEOUT_INIT: "600" # default 600 (seconds) describes the time between server start and the pausing of the process, when no client connects inbetween (read as timeout initialized)
       # AUTOPAUSE_TIMEOUT_KN: "1800" # default 120 (seconds) describes the time between knocking of the port (e.g. by the main menu ping) and the pausing of the process, when no client connects inbetween (read as timeout knocked)
       # AUTOPAUSE_PERIOD: "10" # default 10 (seconds) describes period of the daemonized state machine, that handles the pausing of the process (resuming is done independently)
       # AUTOPAUSE_KNOCK_INTERFACE: "eth0" # default eth0, Describes the interface passed to the knockd daemon. If the default interface does not work, run the ifconfig command inside the container and derive the interface receiving the incoming connection from its output. The passed interface must exist inside the container. Using the loopback interface (lo) does likely not yield the desired results.
+      # AUTOPAUSE_KNOCK_INTERFACE: "lo" 
+        # java8 ftb: AUTOPAUSE_KNOCK_INTERFACE: both default an lo didn't work: [Autopause loop] Autopause failed to initialize.
+
       
+      # CurseForge options using downloaded server-files.zip
+      TYPE: CURSEFORGE
+      CF_SERVER_MOD: /modpacks/SIMPLE-SERVER-FILES-1.8.7.zip
+
       # Forge options
       #  VERSION: "1.12.2"
       #  TYPE: FORGE
       #  FORGEVERSION: "14.23.5.2847"
 
-      # CurseForge options using downloaded server-files.zip
-      TYPE: CURSEFORGE
-      CF_SERVER_MOD: /modpacks/SIMPLE-SERVER-FILES-1.8.7.zip
+      # FTB options
+      #   VERSION: "1.12.2"
+      #   TYPE: FTB
+      #   FTB_SERVER_MOD: "FTBRevelationServer_3.0.1.zip"
+
+      # SPIGOT options
+      #   VERSION: "1.12.2"
+      #   TYPE: "SPIGOT"
+      #   BUILD_FROM_SOURCE: "true"
+
+      # Native minecraft options
+      #   VERSION: "1.17.0"
 
       ALLOW_FLIGHT: "true"
       ALLOW_NETHER: "true"
@@ -48,7 +67,7 @@ services:
       FORCE_GAMEMODE: "false" # false - Players will join in the gamemode they left in.
       GUI: "false"
       MODE: "creative"
-      MOTD: "All the mods"
+      MOTD: "$DOCKER_NAME" # Update
       ONLINE_MODE: "true"
       OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2"
 

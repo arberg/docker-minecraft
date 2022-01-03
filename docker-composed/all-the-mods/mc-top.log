@@ -1,0 +1,9 @@
+top - 12:05:37 up 108 days,  2:26,  2 users,  load average: 2.19, 3.85, 3.25
+Tasks:   2 total,   0 running,   2 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 23.7 us,  1.7 sy,  0.0 ni, 74.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  24070.8 total,    288.2 free,  10703.7 used,  13078.9 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.  11661.5 avail Mem 
+
+  PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+14467 nobody    20   0 7759820  62356  11348 S   0.0   0.3   0:02.67 java -Dfml.queryResult=confirm -jar serverstarter-2.0.1.jar
+14916 nobody    20   0 7714556   3.2g  16556 S   0.0  13.7  34:29.39 java -XX:+IgnoreUnrecognizedVMOptions --add-exports=java.base/sun.security.util=ALL-UNNAMED --add-opens=java.base/java.util.jar=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX+

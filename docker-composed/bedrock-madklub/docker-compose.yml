@@ -1,0 +1,41 @@
+version: '3.2'
+# Port: 25565 Game client connect
+# Port: 25575 RCON remote CLI port
+# UID 99 is nobody
+# Download server files at: https://www.curseforge.com/minecraft/modpacks/all-the-mods-6/files
+services:
+  mc:
+    container_name: minecraftPeMadklub
+    image: itzg/minecraft-bedrock-server:latest
+    restart: always
+    volumes:
+    - ./data:/data
+    # - /etc/timezone:/etc/timezone:ro
+    - /etc/localtime:/etc/localtime:ro
+    environment:
+      # See https://hub.docker.com/r/itzg/minecraft-bedrock-server
+      # OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2"
+      ONLINE_MODE: "true"
+      GAMEMODE: "creative"
+      DIFFICULTY: "normal"
+      MAX_PLAYERS: 20
+      #WHITE_LIST: "false"
+      # Names are case-sensitive
+      WHITE_LIST_USERS: "QuirkySpirit,LunaKittyCatty,Magicilly,CrackyAppy,ShoppyDoppy,gamlegumleged,stoftomat,Kingcarrot1234,NightFreya" 
+      OPS: "2535445765853694,2535430614959072,2535446584047661,2535441563445514,2535428020221619,2535439040420811"
+      GUI: "false"
+      EULA: "true"
+      UID: 99
+      GID: 100
+    ports:
+      - 19140:19132/udp
+
+# Kingcarrot1234: Oscar
+# gamlegumleged: Ask
+# stoftomat: Sif
+
+# CrackyAppy, xuid: 2535430614959072
+# gamlegumleged, xuid: 2535446584047661
+# stoftomat, xuid: 2535441563445514
+# Kingcarrot1234, xuid: 2535428020221619
+# NightFreya, xuid: 2535439040420811

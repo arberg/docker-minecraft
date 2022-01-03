@@ -1,0 +1,10 @@
+Note there's no rcon, instead see below. I havn't tried it yet (2021.12)
+
+See Executing server commands in https://hub.docker.com/r/itzg/minecraft-bedrock-server
+> Assuming you started container with stdin and tty enabled (such as using -it), you can attach to the container's console by its name or ID using:
+> 
+> docker attach CONTAINER_NAME_OR_ID
+> While attached, you can execute any server-side commands, such as op'ing your player to be admin:
+> 
+> op YOUR_XBOX_USERNAME
+> When finished, detach from the server console using Ctrl-p, Ctrl-q

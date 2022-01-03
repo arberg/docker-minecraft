@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# set +x
+# set -e
+# export path set by /etc/profile, because when executing though ssh-command, we don't get profile loaded
+export PATH=$PATH:/home/alex/bin:/home/alex/app/bin:/home/alex/bin/unraid-bin:/sbin:/usr/sbin:/boot/bin:/mnt/user/app/scala/bin:/mnt/user/app/java/jdk/bin
+
+SCRIPTPATH="$( realpath "$(dirname "$0")" )"
+MINECRAFT_PARENT_PATH="$SCRIPTPATH/.."
+STATE_PATH="$MINECRAFT_PARENT_PATH/state"
+STATE_RUNNING_INSTANCE_FILE="$STATE_PATH/stateRunningInstance.dat"
+. "$MINECRAFT_PARENT_PATH/minecraftCommonFunctions.sh"
+# Docker-compose auto-reads from .env, hence the name
+. ./.env
+
+STATE_INSTANCE_DATA="$STATE_PATH/stateDataFolder.${DOCKER_NAME}.dat"
+# I'm not sure this data folder is correct for all, some probably are within FeedTheBeast. It's never though, it hasn't been used yet by ammonite backup-script for moving backups to w:. 
+echo "$(pwd)/data" > "$STATE_INSTANCE_DATA"
+
+# TODO Join these files to one state file, maybe use powershell or elkstack script style
+
+start() {
+	# Requires root if any are to be changed
+	fixPermissionsCurrentDockerComposedDir
+
+	# Wipe log of this docker - https://stackoverflow.com/questions/42510002/docker-how-to-clear-the-logs-properly-for-a-docker-container
+	if cat docker-compose.yml | grep -q "itzg/minecraft-server" ; then
+		dockerLogFile=$(docker inspect --format='{{.LogPath}}' $DOCKER_NAME)
+		if [[ $? -eq 0 ]] ; then
+			truncate -s 0 $dockerLogFile
+		fi
+	fi
+	
+	# It seems separate pull is necessary, I don't think up performs pull, though maybe with --build. 
+	sudo docker-compose pull 
+	sudo docker-compose up -d --build 
+	if (( $? == 0 )) ; then
+	    echo "$DOCKER_NAME" > $STATE_RUNNING_INSTANCE_FILE
+	echo "Data volume: /data => $HOSTDATA"
+	echo "World cache volume: $HOSTDATA_CACHE"
+	fi
+
+	echo "############################  Docker UP done  ############################"
+}
+
+stop() {
+	sudo docker exec $DOCKER_NAME rcon-cli stop
+	docker-compose stop
+}
+
+rm() {
+	stop
+	sudo docker-compose rm -fs
+}
+
+logs() {
+	sudo docker-compose logs $* | grep -v "AutoCompaction..."
+}
+
+COMMAND=$1
+shift
+case "$COMMAND" in
+run)
+	start
+;;
+start)
+        start
+;;
+stop)
+        stop
+;;
+restart)
+	echo "=== Stopping, updating, and restarting container ==="
+        rm
+	start
+;;
+rm)
+        rm
+;;
+logs)
+        logs $*
+;;
+pause)
+        sudo docker-compose pause
+;;
+unpause)
+        sudo docker-compose unpause
+;;
+
+
+*)
+    echo "Usage: $0 {"
+    echo "    start "
+    echo "  | stop  "
+    echo "  | restart "
+    echo "  | rm"
+    echo "  | pause"
+    echo "  | unpause"
+    echo "  | logs <-f>"
+    echo "}"
+    echo "Note that restart also updates image, deletes and recreates container"
+    exit 1
+esac 

@@ -1,0 +1,7 @@
+AllTheMods er virkeligt langsom til at starte. Server tager måske 5 min om at starte, og login på verden tager ca 1.5 minut.
+
+Hvis det startes lokalt med verden på klient som server, så skal man give den endnu længere til at starte op, og for en sikkerheds skyld, lad vær med at alt-tabbe. Den går i suspenden mode i task-manager, og kommer vist ikke videre.
+
+
+2021.02.18: Dette er nu primær. Der er en kopi af mayas save i på PIL, men Maya har spillet videre her på server
+Måske er det faktisk bedre at have det på pc, da hun selv kan starte den, men måske også fint på server hvis hun kan starte med ssh kommando

@@ -1,0 +1,8 @@
+Delete (move away) data/FeedTheBeast
+Download new server modpack to /modpacks
+- from https://www.curseforge.com/minecraft/modpacks/all-the-mods-6/files
+--- Additional Files
+- or from CurseForge > Download Server Pack
+
+Create '.disable_md5' in config
+- Disabled grundet: Failed to read config/ftbquests/quests/reward_tables/.disk4.md5: java.lang.NumberFormatException: For input string: "b4360a1035b7dd3f6d06102c3439c1e5" 

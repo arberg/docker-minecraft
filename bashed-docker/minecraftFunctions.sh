@@ -41,25 +41,12 @@ RUN_AS_GID=$(getent group users | awk -F\: '{print $3}')
 
 STATE_RUNNING_INSTANCE_FILE=../state/stateRunningInstance.dat
 
+. ../minecraftCommonFunctions.sh
 
 sleepAndStatus() {
     echo "Sleeping 1 sec ..."
     sleep 1
     getState
-}
-
-status() {
-    echo "##### All"
-    docker ps -a | grep minecraft
-    echo "##### Only this"
-    docker ps -a | grep $DOCKER_NAME
-    echo "##### This state"
-    getState
-}
-
-
-getState() {
-     docker inspect $DOCKER_NAME --format  "{{.State.Status}}"
 }
 
 start() {
@@ -92,16 +79,6 @@ stopPrevious() {
     # sleep 1
 }
 
-stopDockerInstance() {
-    echo "Force stopping $1"
-    docker stop $1
-    getState
-}
-
-rcon() {
-    echo "> docker exec $DOCKER_NAME rcon-cli $*"
-    docker exec $DOCKER_NAME rcon-cli $*
-}
 
 stop() {
 	state=$(getState)
@@ -149,42 +126,18 @@ stop() {
     fi
 }
 
+fixPermissions() {
+    HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/${DATA_DIR}
+    # HOSTDATA_CACHE=/mnt/cache/cacheonly/dockerhub/itzg-minecraft-server/${DATA_DIR}
+    fixPermissionsAllUsersWrite $HOSTDATA
+    # fixPermissionsOwnerWrite $HOSTDATA_CACHE
+}
+
 rmDocker() {
     docker rm $DOCKER_NAME
 }
 
-fixOwnership() {
-	echo "fixOwnership $1"
-    dir=$1
-    sudo find $dir \( ! -uid $RUN_AS_UID -o ! -gid $RUN_AS_GID \) -exec chown -R $RUN_AS_UID:$RUN_AS_GID {} \; -exec echo "chown -R $RUN_AS_UID:$RUN_AS_GID {}"  \; -print
-}
-fixPermissionsAllUsersWrite() {
-	echo "fixPermissionsAllUsersWrite $1"
-    dir=$1
-    fixOwnership $1
-    # queries all with missing correct permissionsa and sets the perms on those files/folders
-    sudo find $dir \( -type d \( ! -perm -a+r -o ! -perm -a+w -o ! -perm -a+x \) -print  -exec chmod 777 {} \; \) -o \( -type f \( ! -perm -a+r -o ! -perm -a+w \) -print -exec chmod a+rw {} \; \)
-}
-fixPermissionsOwnerWrite() {
-	echo "fixPermissionsOwnerWrite $1"
-    dir=$1
-    fixOwnership $1
-    # u The user who owns it (1.)
-    # g Other users in the file's Group (2.)
-    # o Other users not in the file's group (3.)
-    # a All users (all)
-    sudo find $dir \( -type d \( ! -perm -a+r -o ! -perm -u+w -o -perm -g+w -o -perm -a+w -o ! -perm -a+x \) -print -exec chmod 755 {} \; \) -o  \( -type f \( ! -perm -a+r -o ! -perm -u+w -o -perm -g+w -o -perm -a+w \) -print -exec chmod u+rw,g-w,o-w {} \; \)
-}
-# Requires root if any are to be changed
-fixPermissions() {
-    HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/${DATA_DIR}
-    HOSTDATA_CACHE=/mnt/cache/cacheonly/dockerhub/itzg-minecraft-server/${DATA_DIR}
-    fixPermissionsAllUsersWrite $HOSTDATA
-    fixPermissionsOwnerWrite $HOSTDATA_CACHE
-}
-rmSafe() {
-	[[ -f $1 ]] && rm $1
-}
+
 fixSpigotBuildRenameError() {
     dataDir=$1
     echo "Checking Spigot build: $dataDir"
@@ -206,27 +159,30 @@ createAndStartDocker() {
         echo "ERROR: Run as root"
         exit 1
     fi
-    echo ./linkDataWoldsViaCacheOnly.sh ${DATA_DIR} "includeBackups"
-    if [[ "$TYPE_CUSTOM" == "coolcraft" ]] ; then
-    	./linkDataWoldsViaCacheOnly.sh ${DATA_DIR} "includeBackups"
-    else
-    	./linkDataWoldsViaCacheOnly.sh ${DATA_DIR} "includeBackups"
-	fi
-    HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/${DATA_DIR}
-    HOSTDATA_CACHE=/mnt/cache/cacheonly/dockerhub/itzg-minecraft-server/${DATA_DIR}
-    if [[ -d $HOSTDATA/world/world ]] || [[ -d $HOSTDATA/world_nether/world_nether ]] || [[ -d $HOSTDATA/world_the_end/world_the_end ]] ; then
-        echo "Error: Loop in $HOSTDATA/world/world"
-        echo "or world_nether or world_the_end"
-        rm $HOSTDATA/world/world
-        rm $HOSTDATA/world_nether/world_nether
-        rm $HOSTDATA/world_the_end/world_the_end
-        exit 1
-    fi
+
+    #  I want to split into /mnt/cache as I have SSD, and its also not worth the pain
+ #    echo ./linkDataWoldsViaCacheOnly.sh ${DATA_DIR} "includeBackups"
+ #    if [[ "$TYPE_CUSTOM" == "coolcraft" ]] ; then
+ #    	./linkDataWoldsViaCacheOnly.sh ${DATA_DIR} "includeBackups"
+ #    else
+ #    	./linkDataWoldsViaCacheOnly.sh ${DATA_DIR} "includeBackups"
+ #    fi
+ #    HOSTDATA=/mnt/user/dockerhub/itzg-minecraft-server/${DATA_DIR}
+ #    HOSTDATA_CACHE=/mnt/cache/cacheonly/dockerhub/itzg-minecraft-server/${DATA_DIR}
+ #    if [[ -d $HOSTDATA/world/world ]] || [[ -d $HOSTDATA/world_nether/world_nether ]] || [[ -d $HOSTDATA/world_the_end/world_the_end ]] ; then
+ #        echo "Error: Loop in $HOSTDATA/world/world"
+ #        echo "or world_nether or world_the_end"
+ #        rm $HOSTDATA/world/world
+ #        rm $HOSTDATA/world_nether/world_nether
+ #        rm $HOSTDATA/world_the_end/world_the_end
+ #        exit 1
+ #    fi
     fixPermissions
 
 	echo "$HOSTDATA" > "state/stateDataFolder.${DOCKER_NAME}.dat"
 	echo "Data volume: /data => $HOSTDATA"
-	echo "World cache volume: $HOSTDATA_CACHE"
+    HOSTDATA_CACHE="/UnusedCache" # Still declare it as I havn't removed volumes below
+	# echo "World cache volume: $HOSTDATA_CACHE"
 
     # Make Docker scripts reuse OPS list given here by deleting ops.txt.converted
     rmSafe $HOSTDATA/ops.txt.converted
@@ -304,13 +260,11 @@ createAndStartDocker() {
             -e MAX_MEMORY="$MAX_MEMORY" \
             -e GUI=false \
             -e ENABLE_AUTOPAUSE="$AUTO_PAUSE"\
-            -v "/etc/timezone:/etc/timezone:ro" \
-            -v "/etc/localtime:/etc/localtime:ro" \
             -p $PORT:25565 \
             -p $RCON_PORT:25575 \
             -e JVM_DD_OPTS=docker=${DOCKER_NAME} \
 			-e UID=$RUN_AS_UID -e GID=$RUN_AS_GID \
-            -e EULA=TRUE --name $DOCKER_NAME itzg/minecraft-server
+            -e EULA=TRUE --name $DOCKER_NAME itzg/minecraft-server:java8
     elif [[ "$TYPE" == "FORGE" ]] ; then
         echo "FORGE"
         docker run -d \

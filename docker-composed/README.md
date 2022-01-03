@@ -2,3 +2,7 @@ Download server modpacks at [CurseForge](https://www.curseforge.com/minecraft/mo
 
 See [DockerHub itzg server](https://hub.docker.com/r/itzg/minecraft-server) and its [documentation at GitHub](https://github.com/itzg/docker-minecraft-server/blob/master/README.md#running-a-server-with-a-curseforge-modpack).
 
+
+## HowTo Run
+
+`../all-the-mods> ../runDockerCurrentDir.sh`

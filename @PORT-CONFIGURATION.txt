@@ -21,5 +21,13 @@
 #   25582 RlCraft Marcus
 #   25583 Vanilla Marcus
 #   25584 AllTheMods
+
+#   25591 IslarNublarDinosaurs-Miley
 #   25599 == Max forwarded by router ==
 
+
+Bedrock Pocket Edition - default port: 19132
+#   19132 NadiaVenner
+#   19133 MayaNadiaVerdenVerden
+
+#   19140 Madklub
