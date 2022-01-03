@@ -9,6 +9,12 @@ https://www.youtube.com/results?search_query=pondus+plus+plus
 
 Below has not be updated. See docker-composed for simpler docker startups.
 
+## Andre pondus modpacks
+
+https://www.curseforge.com/minecraft/modpacks/pondus/files/2548541
+
+>>>>>>> cb79217c89503855765c9dc0ed0ac8dcbf4eb541
+
 ## Hjælp en ven i nøden :)
 
 Nedenstående er skrevet til en ven, men måske kan andre få nytte af det...
