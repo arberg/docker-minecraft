@@ -1,0 +1,29 @@
+DATE=$(date '+%y%m%d')
+BACKUP_BEFORE_RESTORE="backup-before-restore-$DATE"
+BACKUP_TO_RESTORE="backup-pre-1.18.33.02"
+
+bedrock-nadia-venner>
+ zip -r data-bad-update.zip data
+ cd data
+
+ mkdir $BACKUP_BEFORE_RESTORE
+
+ mv behavior_packs $BACKUP_BEFORE_RESTORE
+ mv definitions $BACKUP_BEFORE_RESTORE
+ mv minecraftpe $BACKUP_BEFORE_RESTORE
+ mv resource_packs $BACKUP_BEFORE_RESTORE
+ mv structures $BACKUP_BEFORE_RESTORE
+ mv treatments $BACKUP_BEFORE_RESTORE
+ mv world_templates  $BACKUP_BEFORE_RESTORE
+ ls -las
+
+
+ # todo
+ mv $BACKUP_TO_RESTORE/* .
+ rmdir $BACKUP_TO_RESTORE
+ ls -las
+
+
+ mv worlds worlds_before-restore-$DATE
+
+ echo "TODO: Restore worlds to original place from duplicati"

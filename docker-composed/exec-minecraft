@@ -4,6 +4,8 @@
 # export path set by /etc/profile, because when executing though ssh-command, we don't get profile loaded
 export PATH=$PATH:/home/alex/bin:/home/alex/app/bin:/home/alex/bin/unraid-bin:/sbin:/usr/sbin:/boot/bin:/mnt/user/app/scala/bin:/mnt/user/app/java/jdk/bin
 
+BEDROCK_VERSION="1.18.33.02"
+
 SCRIPTPATH="$( realpath "$(dirname "$0")" )"
 MINECRAFT_PARENT_PATH="$SCRIPTPATH/.."
 STATE_PATH="$MINECRAFT_PARENT_PATH/state"
@@ -18,42 +20,68 @@ echo "$(pwd)/data" > "$STATE_INSTANCE_DATA"
 
 # TODO Join these files to one state file, maybe use powershell or elkstack script style
 
+pull() {
+	docker-compose pull 
+}
+
+isJavaVersion() {
+	cat docker-compose.yml | grep -q "itzg/minecraft-server" && echo true || echo false
+}
+
 start() {
+	if [[ $(isJavaVersion) == true ]] ; then
+		echo "#####################"
+		echo "### Java Detected ###"
+		echo "#####################"	
+	else
+		echo "##################################################"
+		echo "### BEDROCK VERSION: $BEDROCK_VERSION ###"
+		echo "### Update exec-minecraft.sh to update version ###"
+		echo "##################################################"
+	fi
 	# Requires root if any are to be changed
 	fixPermissionsCurrentDockerComposedDir
 
 	# Wipe log of this docker - https://stackoverflow.com/questions/42510002/docker-how-to-clear-the-logs-properly-for-a-docker-container
-	if cat docker-compose.yml | grep -q "itzg/minecraft-server" ; then
-		dockerLogFile=$(docker inspect --format='{{.LogPath}}' $DOCKER_NAME)
-		if [[ $? -eq 0 ]] ; then
-			truncate -s 0 $dockerLogFile
-		fi
+	if [[ $(isJavaVersion) == true ]] ; then
+		clearLog
 	fi
 	
 	# It seems separate pull is necessary, I don't think up performs pull, though maybe with --build. 
-	sudo docker-compose pull 
-	sudo docker-compose up -d --build 
 	if (( $? == 0 )) ; then
-	    echo "$DOCKER_NAME" > $STATE_RUNNING_INSTANCE_FILE
-	echo "Data volume: /data => $HOSTDATA"
-	echo "World cache volume: $HOSTDATA_CACHE"
+		echo "$DOCKER_NAME" > $STATE_RUNNING_INSTANCE_FILE
+		echo "Data volume: /data => $HOSTDATA"
+		echo "World cache volume: $HOSTDATA_CACHE"
 	fi
+	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose up -d --build 
 
 	echo "############################  Docker UP done  ############################"
 }
 
 stop() {
-	sudo docker exec $DOCKER_NAME rcon-cli stop
-	docker-compose stop
+	if [[ $(isJavaVersion) == true ]] ; then
+		echo "Java server detect, will try to gracefully stop server"
+		docker exec $DOCKER_NAME rcon-cli stop
+	else
+		echo "Bedrock detected. rcon-cli graceful stop not yet implemented in Alex' script"
+	fi
+	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose stop
 }
 
 rm() {
 	stop
-	sudo docker-compose rm -fs
+	docker-compose rm -fs
 }
 
 logs() {
-	sudo docker-compose logs $* | grep -v "AutoCompaction..."
+	docker-compose logs $* | grep -v "AutoCompaction..."
+}
+
+clearLog() {
+	dockerLogFile=$(docker inspect --format='{{.LogPath}}' $DOCKER_NAME)
+	if [[ $? -eq 0 ]] ; then
+		sudo truncate -s 0 $dockerLogFile
+	fi
 }
 
 COMMAND=$1
@@ -63,6 +91,10 @@ run)
 	start
 ;;
 start)
+        start
+;;
+updateAndStart)
+        pull
         start
 ;;
 stop)
@@ -79,6 +111,9 @@ rm)
 logs)
         logs $*
 ;;
+clearLog)
+        clearLog
+;;
 pause)
         sudo docker-compose pause
 ;;
@@ -90,12 +125,14 @@ unpause)
 *)
     echo "Usage: $0 {"
     echo "    start "
+    echo "  | updateAndStart  "
     echo "  | stop  "
     echo "  | restart "
     echo "  | rm"
     echo "  | pause"
     echo "  | unpause"
     echo "  | logs <-f>"
+    echo "  | clearLog"
     echo "}"
     echo "Note that restart also updates image, deletes and recreates container"
     exit 1

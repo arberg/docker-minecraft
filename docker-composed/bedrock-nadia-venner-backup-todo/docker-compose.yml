@@ -16,7 +16,7 @@ services:
       # See https://hub.docker.com/r/itzg/minecraft-bedrock-server
       # OPS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2"
       # Latest version may not be available in Play store yet.
-      VERSION: $BEDROCK_VERSION
+      VERSION: "1.18.33.02"
       ONLINE_MODE: "true"
       GAMEMODE: "creative"
       DIFFICULTY: "normal"
@@ -27,3 +27,20 @@ services:
       GID: 100
     ports:
       - 19132:19132/udp
+
+# TODO FINISH
+#  https://github.com/Kaiede/Bedrockifier/wiki
+  backup:
+      image: kaiede/minecraft-bedrock-backup
+      name: ${DOCKER_NAME}_backup
+      restart: always
+      depends_on:
+        #  Name of above???
+        - "bedrock_server"
+      environment:
+        TZ: "America/Los_Angeles"
+      tty: true
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - /opt/bedrock/backups:/backups
+        - /opt/bedrock/server:/server
