@@ -1,0 +1,54 @@
+See Madklub, se Nadia venner docker-compose.yml
+
+Names are case-sensitive, and can be found on login-screen, its the user-name
+
+Bedrock 1.20.10 has an issue where allowlist no longer works without xuid's and therefore the docker ALLOW_LIST does not work.
+It DOES work without xuid's when attaching to running docker and using 'allowlist add' to add all players by gamertags.
+  issue tracker: https://github.com/itzg/docker-minecraft-bedrock-server/issues/336
+
+Old which worked before 1.20.10 bug in which xuid are required
+  Get User name and xuid by starting server with 
+    ALLOW_LIST: "false"
+  and then let user login and check logs.
+  Note that 'docker-compose.yml' updates server.properties. Its the server.properties that is the master that Minecraft reads.
+  Note that pre 1.16 used WHITE_LIST instead of ALLOW_LIST.
+
+
+
+#### Berg ####
+# Magicilly, 2535467302265018
+# QuirkySpirit, 2535445765853694
+# LunaKittyCatty, 2535411961361588
+# CrackyAppy, xuid: 2535430614959072
+# ShoppyDoppy, 2535446677896915
+# Mileynasian, 2535420538044842 (Mileys nye konto hvor jeg har kodeord i 1password, Google+Microsoft login mileynasian@gmail.com)
+# MBBeyblade (Mileys gamle konto hvor Jon har glemt login)
+# Mr_Duckv2
+
+#### Madklub ####
+# Kingcarrot1234, xuid: 2535428020221619, Oscar
+# gamlegumleged, xuid: 2535446584047661, Ask
+# stoftomat, xuid: 2535441563445514, Sif/Tomas Toft
+
+
+
+Adding users via commands:
+docker attach minecraft_NAME
+allowlist add QuirkySpirit
+allowlist add Magicilly
+allowlist add QuirkySpirit
+allowlist add LunaKittyCatty
+allowlist add Mr_Duckv2
+allowlist add ShoppyDoppy
+allowlist add Mileynasian
+allowlist add MBBeyblade
+allowlist add CrackyAppy
+allowlist add Kingcarrot1234
+allowlist add gamlegumleged
+allowlist add stoftomat
+
+allowlist list
+
+add operators:
+op Magicilly
+op list

@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# set +x
+# set -x
 # set -e
 # export path set by /etc/profile, because when executing though ssh-command, we don't get profile loaded
+
 export PATH=$PATH:/home/alex/bin:/home/alex/app/bin:/home/alex/bin/unraid-bin:/sbin:/usr/sbin:/boot/bin:/mnt/user/app/scala/bin:/mnt/user/app/java/jdk/bin
 
-BEDROCK_VERSION="1.18.33.02"
+# Run with latest to find latest version (it downloads from this non-browsable folder https://minecraft.azureedge.net/bin-linux/<version>.zip)
+BEDROCK_VERSION="1.20.12.01"
+# BEDROCK_VERSION="latest"
 
 SCRIPTPATH="$( realpath "$(dirname "$0")" )"
 MINECRAFT_PARENT_PATH="$SCRIPTPATH/.."
@@ -21,7 +24,7 @@ echo "$(pwd)/data" > "$STATE_INSTANCE_DATA"
 # TODO Join these files to one state file, maybe use powershell or elkstack script style
 
 pull() {
-	docker-compose pull 
+	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose pull 
 }
 
 isJavaVersion() {
@@ -39,7 +42,7 @@ start() {
 		echo "### Update exec-minecraft.sh to update version ###"
 		echo "##################################################"
 	fi
-	# Requires root if any are to be changed
+	# Requires root if any are to be changed - see ../minecraftCommonFunctions
 	fixPermissionsCurrentDockerComposedDir
 
 	# Wipe log of this docker - https://stackoverflow.com/questions/42510002/docker-how-to-clear-the-logs-properly-for-a-docker-container
@@ -56,6 +59,10 @@ start() {
 	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose up -d --build 
 
 	echo "############################  Docker UP done  ############################"
+
+	if [[ "x$1" != "x" ]] ; then
+		logs $*
+	fi
 }
 
 stop() {
@@ -63,18 +70,22 @@ stop() {
 		echo "Java server detect, will try to gracefully stop server"
 		docker exec $DOCKER_NAME rcon-cli stop
 	else
-		echo "Bedrock detected. rcon-cli graceful stop not yet implemented in Alex' script"
+		echo "Bedrock detected. Stopping server via docker will stop server gracefully according to logs"
+		# Sending stop signal via docker also stops server gracefully according to logs. This below also stops gracefully, but server then restarts because my docker-compose scripts have 'restart: always' policy
+		# $SCRIPTPATH/bedrock-command.exp $DOCKER_NAME stop
 	fi
 	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose stop
+	echo "Status '$DOCKER_NAME': $(docker ps -a --filter name=$DOCKER_NAME --format  "{{.Status}}")"
+	
 }
 
-rm() {
+rmDocker() {
 	stop
-	docker-compose rm -fs
+	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose rm -fs
 }
 
 logs() {
-	docker-compose logs $* | grep -v "AutoCompaction..."
+	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose logs $* | grep -v "AutoCompaction..."
 }
 
 clearLog() {
@@ -88,25 +99,37 @@ COMMAND=$1
 shift
 case "$COMMAND" in
 run)
-	start
+	start $*
 ;;
 start)
-        start
+        start $*
 ;;
 updateAndStart)
         pull
-        start
+        start $*
+;;
+updateToLatest)
+	rmDocker
+
+	rm -r data/backup-pre-*
+	$SCRIPTPATH/backupCurrentMinecraftDir.sh "-$BEDROCK_VERSION"
+
+	BEDROCK_VERSION="latest"
+	pull
+	start
+	echo ">>>>>>>> Now check logs and find version and update exec-minecraft.sh manually"
+	logs -f
 ;;
 stop)
         stop
 ;;
 restart)
 	echo "=== Stopping, updating, and restarting container ==="
-        rm
-	start
+        rmDocker
+	start $*
 ;;
 rm)
-        rm
+        rmDocker
 ;;
 logs)
         logs $*
@@ -115,22 +138,28 @@ clearLog)
         clearLog
 ;;
 pause)
-        sudo docker-compose pause
+        sudo BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose pause
 ;;
 unpause)
-        sudo docker-compose unpause
+        sudo BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose unpause
+;;
+attach)
+	# See OneNote Minecraft Commands and RCON Query
+        sudo docker attach $DOCKER_NAME
 ;;
 
 
 *)
     echo "Usage: $0 {"
-    echo "    start "
+    echo "    start <-f>"
     echo "  | updateAndStart  "
+    echo "  | updateToLatest  "    
     echo "  | stop  "
-    echo "  | restart "
+    echo "  | restart <-f>"
     echo "  | rm"
     echo "  | pause"
     echo "  | unpause"
+    echo "  | attach"
     echo "  | logs <-f>"
     echo "  | clearLog"
     echo "}"

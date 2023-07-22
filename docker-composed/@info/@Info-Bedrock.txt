@@ -22,10 +22,3 @@ Copy to
 	hvor NAME enten er defaulten "Bedrock level"
 	eller name sate i server.properties above
 
-
-
-####### Whitelist ########
-Either use environment WHITE_LIST_USERS or manually set whitelist.json +  (not both)
-When using environment WHITE_LIST_USERS the whitelist.json is updated automatically (with xuids on first connect) and server.properties gets white-list=true set on startup
-
-It's not possible to use /whitelist operator command

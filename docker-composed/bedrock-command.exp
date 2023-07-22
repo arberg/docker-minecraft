@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+set container [lindex $argv 0]
+set command [lindex $argv 1]
+spawn docker attach $container
+send -- "$command\n"
+expect "*\n"
+expect "*\n"
+set timeout 1
+# expect eof

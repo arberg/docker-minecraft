@@ -34,7 +34,7 @@ fixOwnership() {
     # RUN_AS_GID=$[3:-$RUN_AS_GID]
     # [[ "$RUN_AS_UID" == "" ]] && echo "Error fixOwnership: Missing argument UID" && exit 1
     # [[ "$RUN_AS_GID" == "" ]] && echo "Error fixOwnership: Missing argument GID" && exit 1
-    echo -n "fixOwnership: $1 ..."
+    echo -n "fixOwnership: $dir ..."
     [ -d $dir ] && sudo find $dir \( ! -uid $RUN_AS_UID -o ! -gid $RUN_AS_GID \) -exec chown -R $RUN_AS_UID:$RUN_AS_GID {} \; -exec echo "chown -R $RUN_AS_UID:$RUN_AS_GID {}"  \; -print > /dev/null
     echo "Done!"
 }
@@ -58,10 +58,14 @@ fixPermissionsOwnerWrite() {
 # Requires root if any are to be changed
 fixPermissionsCurrentDockerComposedDir() {
     HOSTDATA=data
+    mkSafe $HOSTDATA
     #HOSTDATA_CACHE=/mnt/cache/cacheonly/dockerhub/itzg-minecraft-server/${DATA_DIR}
     fixPermissionsAllUsersWrite $HOSTDATA
     #fixPermissionsOwnerWrite $HOSTDATA_CACHE
 }
 rmSafe() {
 	[[ -f $1 ]] && rm $1
+}
+mkSafe() {
+    [[ ! -d $1 ]] && mkdir $1
 }

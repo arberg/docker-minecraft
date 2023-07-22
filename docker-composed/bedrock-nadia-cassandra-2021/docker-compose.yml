@@ -10,7 +10,6 @@ services:
     restart: always
     volumes:
     - ./data:/data
-    - ./extra/allowlist.json:/data/allowlist.json
     # - /etc/timezone:/etc/timezone:ro
     - /etc/localtime:/etc/localtime:ro
     environment:
@@ -21,15 +20,10 @@ services:
       ONLINE_MODE: "true"
       GAMEMODE: "creative"
       DIFFICULTY: "normal"
-      # AllowList only works from in 1.20 when adding xuid to allowlist json, hence mapping volume above. See also commands in ..\@HowTo-MinecraftPE-BedRock---Whitelist.txt 
-      # ALLOW_LIST_USERS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2,CrackyAppy,ShoppyDoppy,MBBeyblade,Mileynasian,gamlegumleged,stoftomat,Kingcarrot1234"
-      ALLOW_LIST: "true"
+      WHITE_LIST_USERS: "QuirkySpirit,LunaKittyCatty,Magicilly,Mr_Duckv2,CrackyAppy,ShoppyDoppy,MBBeyblade"
       GUI: "false"
       EULA: "true"
       UID: 99
       GID: 100
-    ports:
+    ports:      
       - 19132:19132/udp
-    # With 'tty: true' it is possible to attach and run commands: docker attach CONTAINER_NAME_OR_ID > op YOUR_XBOX_USERNAME
-    stdin_open: true
-    tty: true

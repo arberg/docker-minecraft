@@ -1,14 +1,12 @@
-2022.05 I now manually update minecraft app on Maya and Nadias primary tablets, and on server. 
-The BedRock server version is defined in 
-  exec-minecraft:
-   BEDROCK_VERSION="1.18.33.02"
-
 Update strategy
-* Backup server manually
-	 zip -r bedrock-nadia-venner-before-update.zip bedrock-nadia-venner
-* Update Minecraft app phone/old-tablet and server
+* Run upgradeDockerCurrentDir-to-latest-with-backup.sh
+    which executes '../exec-minecraft updateToLatest'
+    - this takes a backup and then updates to latest version
+* Update Minecraft app on phone or old-tablet (alex-phone or lisas smaller phone)
 * Test it works, then update main tablets
+* Update exec-minecraft.sh: BEDROCK_VERSION
 
+Husk: Jeg har også natlig backup i UserScripts til /mnt/user/sync/MinecraftServerSync
 
 Notes
 * Bedrock Server might be out of sync with latest available. Also Bedrock server updates sometimes introduce errors that make it unplayable.
