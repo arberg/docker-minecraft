@@ -14,6 +14,8 @@ Old which worked before 1.20.10 bug in which xuid are required
   Note that pre 1.16 used WHITE_LIST instead of ALLOW_LIST.
 
 
+GamerTag -> xuid
+  https://www.cxkes.me/xbox/xuid
 
 #### Berg ####
 # Magicilly, 2535467302265018

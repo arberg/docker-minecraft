@@ -6,8 +6,10 @@
 export PATH=$PATH:/home/alex/bin:/home/alex/app/bin:/home/alex/bin/unraid-bin:/sbin:/usr/sbin:/boot/bin:/mnt/user/app/scala/bin:/mnt/user/app/java/jdk/bin
 
 # Run with latest to find latest version (it downloads from this non-browsable folder https://minecraft.azureedge.net/bin-linux/<version>.zip)
-BEDROCK_VERSION="1.20.12.01"
+BEDROCK_VERSION="1.20.41.02"
 # BEDROCK_VERSION="latest"
+
+DOCKER_COMPOSE=/mnt/user/home/alex/app/docker-compose/docker-compose
 
 SCRIPTPATH="$( realpath "$(dirname "$0")" )"
 MINECRAFT_PARENT_PATH="$SCRIPTPATH/.."
@@ -56,6 +58,7 @@ start() {
 		echo "Data volume: /data => $HOSTDATA"
 		echo "World cache volume: $HOSTDATA_CACHE"
 	fi
+	#sudo BEDROCK_VERSION="$BEDROCK_VERSION" $DOCKER_COMPOSE up -d --build 
 	BEDROCK_VERSION="$BEDROCK_VERSION" docker-compose up -d --build 
 
 	echo "############################  Docker UP done  ############################"
@@ -113,6 +116,13 @@ updateToLatest)
 
 	rm -r data/backup-pre-*
 	$SCRIPTPATH/backupCurrentMinecraftDir.sh "-$BEDROCK_VERSION"
+
+	echo "TODO (maybe): resticprofile onedriveMinecraft.backup"
+	#echo "Starting resticprofile onedriveMinecraft.backup"
+	# TODO this doesn't work, but I don't know why. It works interactively, when running pwsh and then starting command. 
+	# TODO tag prevents parent snapshot so its very slow. Maybe apply use of path instead of tags to identify parent.
+	#pwsh -Command "{ resticprofile-background onedriveMinecraft.backup --tag='$(basename $(pwd)) BEDROCK=$BEDROCK_VERSION' }"
+
 
 	BEDROCK_VERSION="latest"
 	pull
